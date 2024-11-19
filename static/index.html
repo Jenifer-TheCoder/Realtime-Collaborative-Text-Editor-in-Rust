@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Collaborative Text Editor</title>
+    <style>
+        #editor {
+            width: 100%;
+            height: 300px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-Time Collaborative Text Editor</h1>
+    <textarea id="editor" placeholder="Start typing..."></textarea>
+
+    <script>
+        let editor = document.getElementById('editor');
+        let ws = new WebSocket("ws://localhost:3030/ws");
+
+        // Synchronize cursor position and content
+        editor.addEventListener('input', function() {
+            let message = {
+                content: editor.value,
+                cursor_position: editor.selectionStart
+            };
+            ws.send(JSON.stringify(message));
+        });
+
+        // Receive updates from server
+        ws.onmessage = function(event) {
+            let data = JSON.parse(event.data);
+            editor.value = data.content;
+            editor.setSelectionRange(data.cursor_position, data.cursor_position);
+        };
+    </script>
+</body>
+</html>

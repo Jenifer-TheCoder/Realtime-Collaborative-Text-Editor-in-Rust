@@ -1,0 +1,12 @@
+[package]
+name = "realtime_text_editor"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+warp = "0.3"  # For WebSocket handling
+serde = { version = "1.0", features = ["derive"] }  # For JSON handling
+serde_json = "1.0"
+tokio-tungstenite = "0.15"  # WebSocket support
+futures = "0.3"  # For async streams
